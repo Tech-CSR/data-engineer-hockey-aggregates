@@ -1,6 +1,6 @@
-#Data Engineer Hockey Aggregates
+# Data Engineer Hockey Aggregates
 
-##Introduction
+## Introduction
 ____
 This document is designed to elucidate the process of `data-engineer-hockey-aggregates` component. Technical details are highlighted to seamlessly run the project.
 
@@ -10,13 +10,13 @@ Following are addressed by this component
 - Perform Aggregates on dataframe
 - Calculate overall most efficient placer for each hockey team
 
-##Python Packages
+## Python Packages
 ____
 - Python Version 3.7
 - pySpark Version 2.4.0
 - pySpark Stubs version 2.4.0
 
-##Project Structure
+## Project Structure
 ____
 ```bash
 root/
@@ -37,7 +37,7 @@ root/
  |   Pipfile.lock
 ```
 
-##Final Spark Dataframe Output
+## Final Spark Dataframe Output
 ____
 ```bash
 +----+----+------------------+------------------+------------------+------------------+-------------------+-------------------+---------------------------------------------+---------------------------------------------+
