@@ -5,6 +5,7 @@ This Module accommodates helper methods on initialize SparkSession (Entry point 
 
 from pyspark.sql import SparkSession
 
+
 class SparkProvider(object):
 
     def __init__(self):
