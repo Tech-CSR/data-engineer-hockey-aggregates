@@ -31,8 +31,17 @@ root/
  |   |-- | -- | -- | -- hockey_action.py
  |   |-- | -- | -- resources
  |   |-- | -- | -- | -- Goalies.csv
+ |   |-- | -- | -- util
+ |   |-- | -- | -- | -- util.py
  |   |-- | -- | -- main.py
- |   |-- test 
+ |   |-- test
+ |   |-- | -- python 
+ |   |-- | -- | -- process
+ |   |-- | -- | -- | -- hockey_action_test.py
+ |   |-- | -- | -- test_data
+ |   |-- | -- | -- | -- agg_data.csv
+ |   |-- | -- | -- | -- expected_data.csv
+ |   |-- | -- | -- | -- Goalies..csv
  |   Pipfile
  |   Pipfile.lock
 ```
