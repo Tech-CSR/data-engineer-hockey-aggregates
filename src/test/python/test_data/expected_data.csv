@@ -1,0 +1,8 @@
+tmID,Year,Wins_Agg,Losses_Agg,GP_Agg,Mins_over_GA_agg,GA_Over_SA_Agg,Avg_Percentage_Wins,Most_Goals_Stopped,Most_Efficient_Player
+ALB,1972,19,18.5,42,18.80555556,0.1013269,46.875,"{""PlayerId"":""norrija01"",""Goals_Stopped"":7.0}","{""PlayerId"":""brownke01"",""Efficiency"":0.00119}"
+ANA,1993,11,15.33333333,30,20.97095436,0.092478895,34.72527473,"{""PlayerId"":""gigueje01"",""Goals_Stopped"":36.0}","{""PlayerId"":""bryzgil01"",""Efficiency"":0.00131}"
+ANA,1994,8,13.5,28.5,18.36708861,0.1,26.4957265,"{""PlayerId"":""gigueje01"",""Goals_Stopped"":36.0}","{""PlayerId"":""bryzgil01"",""Efficiency"":0.00131}"
+ANA,1995,17.5,19.5,44.5,20.50826446,0.091875475,35.39548023,"{""PlayerId"":""gigueje01"",""Goals_Stopped"":36.0}","{""PlayerId"":""bryzgil01"",""Efficiency"":0.00131}"
+ANA,1996,12,11,30.66666667,21.90748899,0.08463833,24.15008292,"{""PlayerId"":""gigueje01"",""Goals_Stopped"":36.0}","{""PlayerId"":""bryzgil01"",""Efficiency"":0.00131}"
+ANA,1997,8.666666667,14.33333333,31,19.76984127,0.101490133,20.25362319,"{""PlayerId"":""gigueje01"",""Goals_Stopped"":36.0}","{""PlayerId"":""bryzgil01"",""Efficiency"":0.00131}"
+ANA,1998,11.66666667,11.33333333,29,24.58910891,0.077932099,22.38325282,"{""PlayerId"":""gigueje01"",""Goals_Stopped"":36.0}","{""PlayerId"":""bryzgil01"",""Efficiency"":0.00131}"

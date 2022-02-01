@@ -4,8 +4,7 @@ Calculating Aggregations, Win Percentage and Player performance
 """
 
 from pyspark.sql import Window
-from pyspark.sql.functions import sum, count, col, lit, row_number, to_json, struct
-
+from pyspark.sql.functions import sum, count, col, lit, row_number, to_json, struct, round
 from config.dataframe_config import DataframeProvider
 from config.logger_config import Logger
 from config.spark_config import SparkProvider
@@ -16,11 +15,16 @@ dfp = DataframeProvider()
 agg_partition = Window.partitionBy("tmID", "year")
 
 
-def extract_data():
+def extract_data(path):
     log.warn("Reading Goalies hockey dataset")
-    hockey_df = spark.read \
-        .option("header", True) \
-        .csv("resources/Goalies.csv")
+
+    try:
+        hockey_df = spark.read \
+            .option("header", True) \
+            .csv(path)
+    except ValueError as read_error:
+        log.error(read_error)
+        raise
 
     return hockey_df
 
@@ -39,17 +43,17 @@ def team_aggregate(hockey_df):
     hockey_agg_df = hockey_agg_df.withColumn("Wins_Agg", col("Total_Wins") / col("Total_Players")) \
         .withColumn("Losses_Agg", col("Total_Losses") / col("Total_Players")) \
         .withColumn("GP_Agg", col("Total_Games_Played") / col("Total_Players")) \
-        .withColumn("Mins_over_GA_agg", col("Total_Minutes_Played") / col("Total_Goals_Against")) \
-        .withColumn("GA_Over_SA_Agg", col("Total_Goals_Against") / col("Total_Shots_Against"))
+        .withColumn("Mins_over_GA_agg", round(col("Total_Minutes_Played") / col("Total_Goals_Against"),3)) \
+        .withColumn("GA_Over_SA_Agg", round(col("Total_Goals_Against") / col("Total_Shots_Against"),3))
 
     return hockey_agg_df
 
 
 def player_win_percentage(hockey_agg_df):
     log.info("Calculate Hockey Win Percentage")
-    player_prcnt = hockey_agg_df.withColumn("Player_Win_Prcnt", (col("W") * lit(100)) / col("GP")) \
+    player_prcnt = hockey_agg_df.withColumn("Player_Win_Prcnt", round((col("W") * lit(100)) / col("GP"),3)) \
         .withColumn("Avg_Percentage_Wins",
-                    sum("Player_Win_Prcnt").over(agg_partition) / count("playerID").over(agg_partition))
+                    round(sum("Player_Win_Prcnt").over(agg_partition) / count("playerID").over(agg_partition),3))
 
     return player_prcnt
 
@@ -86,7 +90,7 @@ def transform_dataframe(hockey_agg):
     final_dataframe = hockey_agg.withColumn("ROW_NUM", row_number().over(agg_partition.orderBy("year"))) \
         .filter(col("ROW_NUM") == 1) \
         .select("tmID",
-                "Ye m ar",
+                "Year",
                 "Wins_Agg",
                 "Losses_Agg",
                 "GP_Agg",
@@ -97,3 +101,4 @@ def transform_dataframe(hockey_agg):
                 "Most_Efficient_Player"
                 )
     dfp.hockey_df = final_dataframe
+    return final_dataframe
