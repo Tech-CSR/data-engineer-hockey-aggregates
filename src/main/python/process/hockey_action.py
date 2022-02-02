@@ -100,5 +100,5 @@ def transform_dataframe(hockey_agg):
                 "Most_Goals_Stopped",
                 "Most_Efficient_Player"
                 )
-    dfp.hockey_df = final_dataframe
+
     return final_dataframe
