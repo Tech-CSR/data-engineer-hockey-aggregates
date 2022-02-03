@@ -36,7 +36,7 @@ pip3 install pipenv
 ### Install Project Dependencies
 Using Pycharm add PipEnv as python interpreter which automatically installs all dependencies. For more details checkout [PipEnv](https://www.jetbrains.com/help/pycharm/pipenv.html#pipenv-new-project)
 
-Alternatively run `pipenv install --dev` command in terminal from project root
+Alternatively run `pipenv install --dev` command in terminal from project root or manually install packages and run with `python 3.7`
 
 ### Running `main.py` file
 From project root terminal, redirect to `src/main/python` and run below command
@@ -48,7 +48,8 @@ python main.py
 ### Running Test cases
 From project root terminal, redirect to `src/test/python/process` and run below command
 ```commandline
-python hockey_action_test
+python hockey_action_test.py
+
 ```
 
 
@@ -108,4 +109,21 @@ root/
 |PIT |1974|9.25              |7.0               |23.0              |16.842          |null          |36.36              |{"PlayerId":"thibajo01","Goals_Stopped":39.0} |{"PlayerId":"conklty01","Efficiency":0.00147}|
 |SJS |2011|21.5              |14.5              |43.5              |25.02           |0.085         |48.684             |{"PlayerId":"belfoed01","Goals_Stopped":76.0} |{"PlayerId":"schaeno01","Efficiency":0.00284}|
 +----+----+------------------+------------------+------------------+----------------+--------------+-------------------+----------------------------------------------+---------------------------------------------+
+```
+
+## Data Assumptions
+When compared with data most common player against the same player when they are not common with their most goals scored
+
+- When Most_Efficient_Player or Most Goals Scored player is winklha01, then teams has good Avg_Percentage_Wins
+- Only 2 teams this player is associated when they are most goals scored
+- For team BOS, player winklha01 has 94 times the highest goals scored
+
+```bash
++-----------------------+----------------------------+----------------------------+----------------------------+----------------------------+
+|Most_Efficient_PlayerID|Same_Max_Avg_Percentage_Wins|Same_Min_Avg_Percentage_Wins|Diff_Max_Avg_Percentage_Wins|Diff_Min_Avg_Percentage_Wins|
++-----------------------+----------------------------+----------------------------+----------------------------+----------------------------+
+|winklha01              |60.714                      |28.115                      |81.035                      |33.761                      |
+|cudewi01               |7.778                       |7.778                       |72.34                       |6.061                       |
+|levaslo01              |37.5                        |37.5                        |55.682                      |21.149                      |
++-----------------------+----------------------------+----------------------------+----------------------------+----------------------------+
 ```

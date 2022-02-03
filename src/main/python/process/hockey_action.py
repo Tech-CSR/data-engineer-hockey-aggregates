@@ -16,6 +16,11 @@ agg_partition = Window.partitionBy("tmID", "year")
 
 
 def extract_data(path):
+    '''
+
+    :param path: File path from Source Root
+    :return: Dataframe loaded using PySpark API
+    '''
     log.warn("Reading Goalies hockey dataset")
 
     try:
@@ -30,6 +35,11 @@ def extract_data(path):
 
 
 def team_aggregate(hockey_df):
+    '''
+
+    :param hockey_df: Dataframe loaded from CSV with headers enabled
+    :return: Dataframe with initial aggregation implemented
+    '''
     log.warn("Calculating player stats for each tmID and Year")
     hockey_agg_df = hockey_df.withColumn("Total_Wins", sum("W").over(agg_partition)) \
         .withColumn("Total_Players", count("playerId").over(agg_partition)) \
@@ -43,25 +53,35 @@ def team_aggregate(hockey_df):
     hockey_agg_df = hockey_agg_df.withColumn("Wins_Agg", col("Total_Wins") / col("Total_Players")) \
         .withColumn("Losses_Agg", col("Total_Losses") / col("Total_Players")) \
         .withColumn("GP_Agg", col("Total_Games_Played") / col("Total_Players")) \
-        .withColumn("Mins_over_GA_agg", round(col("Total_Minutes_Played") / col("Total_Goals_Against"),3)) \
-        .withColumn("GA_Over_SA_Agg", round(col("Total_Goals_Against") / col("Total_Shots_Against"),3))
+        .withColumn("Mins_over_GA_agg", round(col("Total_Minutes_Played") / col("Total_Goals_Against"), 3)) \
+        .withColumn("GA_Over_SA_Agg", round(col("Total_Goals_Against") / col("Total_Shots_Against"), 3))
 
     return hockey_agg_df
 
 
 def player_win_percentage(hockey_agg_df):
+    '''
+
+    :param hockey_agg_df: Dataframe with initial aggregations
+    :return: Dataframe with calculated Avg Team win percentage
+    '''
     log.info("Calculate Hockey Win Percentage")
-    player_prcnt = hockey_agg_df.withColumn("Player_Win_Prcnt", round((col("W") * lit(100)) / col("GP"),3)) \
+    player_prcnt = hockey_agg_df.withColumn("Player_Win_Prcnt", round((col("W") * lit(100)) / col("GP"), 3)) \
         .withColumn("Avg_Percentage_Wins",
-                    round(sum("Player_Win_Prcnt").over(agg_partition) / count("playerID").over(agg_partition),3))
+                    round(sum("Player_Win_Prcnt").over(agg_partition) / count("playerID").over(agg_partition), 3))
 
     return player_prcnt
 
 
 def player_performance(player_prcnt):
+    '''
+
+    :param player_prcnt: Hockey Dataframe with Win Percentage calculated
+    :return: Dataframe with Player performance stored in Dictionary
+    '''
     log.info("Calculating Player Efficiency")
-    player_prcnt = player_prcnt.withColumn("Goals_Stopped", sum("SHO").over(Window.partitionBy("playerID"))) \
-        .withColumn("Minutes_Played", sum("Min").over(Window.partitionBy("playerId"))).cache()
+    player_prcnt = player_prcnt.withColumn("Goals_Stopped", sum("SHO").over(Window.partitionBy("playerID", "Year"))) \
+        .withColumn("Minutes_Played", sum("Min").over(Window.partitionBy("playerId", "Year"))).cache()
 
     goals_stopped = player_prcnt.withColumn("ROW_NUM", row_number().over(Window.partitionBy("tmID")
                                                                          .orderBy(col("Goals_Stopped").desc()))) \
@@ -86,6 +106,12 @@ def player_performance(player_prcnt):
 
 
 def transform_dataframe(hockey_agg):
+    '''
+
+    :param hockey_agg: Final Dataframe with all aggregation calculated
+    :return: Dataframe filter records for each Team and Year with requried column
+    '''
+    # Filter out records for each Team and Year
     log.info("Performing final transformation")
     final_dataframe = hockey_agg.withColumn("ROW_NUM", row_number().over(agg_partition.orderBy("year"))) \
         .filter(col("ROW_NUM") == 1) \
